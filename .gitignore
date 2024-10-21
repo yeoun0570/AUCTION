@@ -4,6 +4,9 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+/src/main/resources/application.properties
+/src/main/auction_front/node_modules/*
+/src/main/auction_front/
 
 ### STS ###
 .apt_generated

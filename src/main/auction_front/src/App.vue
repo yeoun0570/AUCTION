@@ -1,11 +1,8 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router';
+<script>
+import {RouterLink,RouterView} from 'vue-router';
 </script>
 
 <template>
-  <nav>
-    <RouterLink to="/test">test</RouterLink>
-  </nav>
-  
+  <RouterLink to="/test">test</RouterLink>
   <RouterView></RouterView>
 </template>

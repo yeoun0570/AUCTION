@@ -1,16 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router';
-
-const routes = [
-  {
-    path: '/test',
-    name: 'ConnectionTest',
-    component: () => import('../components/ConnectionTest.vue'),
-  },
-];
+import ConnectionTest from "@/components/ConnectionTest.vue";
+import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: "/test",
+      name: "test",
+      component: ConnectionTest,
+    },
+  ],
 });
 
 export default router;

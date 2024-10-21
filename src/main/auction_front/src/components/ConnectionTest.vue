@@ -4,14 +4,14 @@ import { ref, onMounted } from "vue";
 
 export default {
   setup() {
-    const data = ref("로딩 중..."); //데이터 받기 전 기본메시지
+    const data = ref("로딩 중...");
 
     onMounted(async () => {
       try {
-        const response = await axios.get("http://localhost:4000/api/test");
+        const response = await axios.get("http://localhost:8080/api/test"); // 8080 포트로 요청
         data.value = response.data;
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:", error); // 에러 로그 확인
       }
     });
 
