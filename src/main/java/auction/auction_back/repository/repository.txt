@@ -1,0 +1,1 @@
+repository파일 있는 곳 -- JPA사용

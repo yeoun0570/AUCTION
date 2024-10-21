@@ -1,13 +1,11 @@
-<script>
-import ConnectTest from '@/components/ConnectTest.vue';
-
-export default {
-  components: {
-    ConnectTest,
-  },
-};
+<script setup>
+import { RouterLink, RouterView } from 'vue-router';
 </script>
 
 <template>
-  <ConnectTest/>
+  <nav>
+    <RouterLink to="/test">test</RouterLink>
+  </nav>
+  
+  <RouterView></RouterView>
 </template>
