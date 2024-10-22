@@ -14,7 +14,7 @@ public class WebConfig implements WebMvcConfigurer {
         log.info("**********CORS 설정*************");
         registry.addMapping("/api/**")
                 .allowedOrigins("http://localhost:5173")
-                .allowedMethods("GET", "POST", "PUSH", "DELETE", "OPTIONS")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
