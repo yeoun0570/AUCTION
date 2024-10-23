@@ -4,11 +4,18 @@
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 //import org.springframework.security.web.SecurityFilterChain;
 //
 //@Configuration
 //@EnableWebSecurity
 //public class SecurityConfig {
+//
+//    @Bean
+//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+//        return new BCryptPasswordEncoder();
+//        //BCrypt 알고리즘을 사용하여 비밀번호를 해시(암호화)한다.
+//    }
 //
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -35,10 +42,10 @@
 //                .logout((logout) ->
 //                        logout
 //                                .logoutSuccessUrl("/login")
-//                                .deleteCookies("JSESSIONID", "remember-me"))
+//                                .deleteCookies("JSESSIONID", "remember-me"));
 //
 //
-//                .userDetailsService(CustomUserDetailsService);
+////                .userDetailsService(CustomUserDetailsService);
 //
 //        return http.build();
 //    }
