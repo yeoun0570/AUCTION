@@ -1,4 +1,4 @@
-package auction.auction_back.dto;
+package auction.auction_back.dto.orderWithKakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
