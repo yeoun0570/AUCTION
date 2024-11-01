@@ -1,8 +1,7 @@
-<script>
-import {RouterLink,RouterView} from 'vue-router';
+<script setup>
+import TestKakaopayAPI from './components/payments/TestKakaoPayAPI.vue';
 </script>
 
 <template>
-  <RouterLink to="/test">test</RouterLink>
-  <RouterView></RouterView>
+  <TestKakaopayAPI></TestKakaopayAPI>
 </template>
