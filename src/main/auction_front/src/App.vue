@@ -1,7 +1,8 @@
 <script setup>
-import TestKakaopayAPI from './components/payments/TestKakaoPayAPI.vue';
+import PaymentTest from './components/payments/PaymentTest.vue';
+
 </script>
 
 <template>
-  <TestKakaopayAPI></TestKakaopayAPI>
+  <PaymentTest></PaymentTest>
 </template>
