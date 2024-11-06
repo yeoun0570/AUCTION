@@ -1,4 +1,5 @@
 import ConnectionTest from "@/components/ConnectionTest.vue";
+import PaymentSuccess from "@/components/payments/PaymentSuccess.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -9,6 +10,11 @@ const router = createRouter({
       name: "test",
       component: ConnectionTest,
     },
+    {
+      path: '/success',
+      name: 'PaymentSuccess',
+      component: PaymentSuccess,
+    }
 
   ],
 });

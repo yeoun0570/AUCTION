@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaymentResponseDTO {
     private String orderId;
-    private int amount;
+    private String orderName;
+    private int totalAmount;
     private String status;
     private String paymentKey;
 }
