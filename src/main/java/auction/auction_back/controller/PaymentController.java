@@ -46,7 +46,4 @@ public class PaymentController {
                 request.getPaymentKey(), request.getBuyerId(), request.getSellerId());
         return ResponseEntity.ok(response);
     }
-    
-    
-
 }
