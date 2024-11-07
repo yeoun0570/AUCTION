@@ -1,7 +1,6 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
-import { ANONYMOUS } from "@tosspayments/tosspayments-sdk";
 
 const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
 const customerKey = "CUSTOMER-" + Date.now();
