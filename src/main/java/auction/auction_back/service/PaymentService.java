@@ -22,17 +22,19 @@ import java.util.Base64;
 public class PaymentService {
     private final RestTemplateConfig restTemplate;
 
+    //토스 시크릿키 : application.properties에 넣어서 따로 관리할 예정
     private String secretKey = "test_sk_DnyRpQWGrN5Xzapz6XA0VKwv1M9E";
 
     public PaymentResponseDTO getPaymentDetails(String paymentKey) {
+        //paymentKey를 다시 토스 엔드포인트에 보내기 위한 url
         String url = "https://api.tosspayments.com/v1/payments/" + paymentKey;
 
+        //HTTP 헤더에 시크릿키 인코딩해서 적용
         HttpHeaders headers = new HttpHeaders();
         String authHeader = "Basic " + Base64.getEncoder().encodeToString((secretKey + ":").getBytes());
         headers.set("Authorization", authHeader);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
-
         
         //외부 API 호출
         try {
