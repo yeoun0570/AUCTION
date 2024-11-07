@@ -1,5 +1,6 @@
 package auction.auction_back.controller;
 
+import auction.auction_back.dto.payment.PaymentConfirmDTO;
 import auction.auction_back.dto.payment.PaymentResponseDTO;
 import auction.auction_back.dto.payment.PaymentSuccessDTO;
 import auction.auction_back.service.PaymentService;
@@ -16,6 +17,12 @@ import org.springframework.web.bind.annotation.*;
 public class PaymentController {
 
     private final PaymentService paymentService;
+
+    //결제 승인 -> 결제하고 나서 승인 처리 -> IN_PROGRESS 삳태를 DONE 으로 만들어주기
+    @PostMapping("/confirm")
+    public ResponseEntity<PaymentResponseDTO> confirmPayment(@RequestBody PaymentConfirmDTO request) {
+        return ResponseEntity.ok(paymentService.confirmPayment(request));
+    }
 
     //결제 정보 조회
     @GetMapping("/{paymentKey}")
@@ -39,5 +46,7 @@ public class PaymentController {
                 request.getPaymentKey(), request.getBuyerId(), request.getSellerId());
         return ResponseEntity.ok(response);
     }
+    
+    
 
 }

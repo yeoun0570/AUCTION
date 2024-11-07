@@ -23,7 +23,7 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* .new-payment-btn {
+.new-payment-btn {
     margin-left: 10px;
     background-color: #e74c3c;
   }
@@ -96,4 +96,4 @@ button:disabled {
   .status-btn {
     background-color: #2196F3;
     color: white;
-  } */
+  }

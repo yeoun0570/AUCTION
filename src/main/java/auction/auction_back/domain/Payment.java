@@ -24,6 +24,7 @@ public class Payment {
     private int totalAmount;
 
     @Enumerated(EnumType.STRING) // 결제 상태 enum으로 저장
+    @Column(length = 20)
     private PaymentStatus status; // 현재 결제 상태
 
     private LocalDateTime createdAt;        // 결제 생성 시점
@@ -32,6 +33,6 @@ public class Payment {
     private LocalDateTime escrowReleasedAt; //구매 확정 시점 -> 판매자에게 돈이 들어가는 시점
     private LocalDateTime escrowDeadline;   // 에스크로 자동 확정 기한
 
-    private Long buyerId;
-    private Long sellerId;
+    private String buyerId;
+    private String sellerId;
 }

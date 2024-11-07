@@ -13,64 +13,73 @@ onMounted(async () => {
     const paymentInfo = {
       paymentKey: params.get("paymentKey"),
       orderId: params.get("orderId"),
-      amount: params.get("amount")
+      amount: params.get("amount"),
     };
+    console.log("결제 정보: ", paymentInfo);
     paymentResult.value = paymentInfo;
 
-    // 결제 승인 요청
-    await confirmPayment(paymentInfo);
+    //1. 결제 상태 확인
+    const details = await getPaymentDetails();
+
+    //2. DONE 상태일 때만 에스크로 처리 진행
+    if (details?.status === "DONE") {
+      await processSuccessPayment(paymentInfo);
+    } else {
+      await confirmPayment(paymentInfo);
+    }
   } catch (error) {
-    console.error('결제 승인 중 오류:', error);
-    error.value = '결제 승인 중 오류가 발생했습니다.';
+    console.error("결제 승인 중 오류:", error);
+    error.value = "결제 승인 중 오류가 발생했습니다.";
   }
 });
 
 // 결제 승인 요청 (백엔드에서 처리)
 const confirmPayment = async (paymentInfo) => {
   try {
+    console.log("결제 승인 시작");
     const response = await axios.post(
-      'http://localhost:8080/api/payments/confirm',  // 백엔드의 결제 승인 엔드포인트
+      "http://localhost:8080/api/payments/confirm", // 백엔드의 결제 승인 엔드포인트
       {
         paymentKey: paymentInfo.paymentKey,
         orderId: paymentInfo.orderId,
         amount: parseInt(paymentInfo.amount),
-        buyerId: 1,  // 실제로는 로그인한 사용자 ID
-        sellerId: 2  // 실제로는 상품 판매자 ID
+        buyerId: "buyer", // 실제로는 로그인한 사용자 ID
+        sellerId: "seller", // 실제로는 상품 판매자 ID
       }
     );
 
-    console.log('결제 승인 완료:', response.data);
+    console.log("결제 승인 완료:", response.data);
     paymentDetails.value = response.data;
 
+    if (response.data.status === "DONE") {
+      await processSuccessPayment(paymentInfo);
+    }
   } catch (error) {
-    console.error('결제 승인 실패:', error);
-    error.value = '결제 승인 중 오류가 발생했습니다.';
+    console.error("결제 승인 실패:", error);
+    error.value = "결제 승인 중 오류가 발생했습니다.";
   }
 };
 
 // 백엔드에 결제 정보 저장
 const processSuccessPayment = async (paymentInfo) => {
-  loading.value = true;
-  error.value = null;
-
   try {
+    console.log("에스크로 전환 시작");
     const response = await axios.post(
       "http://localhost:8080/api/payments/success",
       {
         paymentKey: paymentInfo.paymentKey,
         orderId: paymentInfo.orderId,
         amount: parseInt(paymentInfo.amount),
-        status: paymentInfo.status,
-        buyerId: 1, // 실제로는 로그인한 사용자 ID
-        sellerId: 2, // 실제로는 상품 판매자 ID
+        buyerId: "buyer", // 실제로는 로그인한 사용자 ID
+        sellerId: "seller", // 실제로는 상품 판매자 ID
       }
     );
 
-    console.log("결제 정보 저장 완료:", response.data);
+    console.log("에스크로로 전환 완료:", response.data);
     paymentDetails.value = response.data;
   } catch (error) {
-    console.error("결제 정보 저장 중 오류:", error);
-    error.value = "결제 정보 저장 중 오류가 발생했습니다.";
+    console.error("에스크로 전환 중 오류:", error);
+    throw error;
   } finally {
     loading.value = false;
   }
@@ -78,18 +87,31 @@ const processSuccessPayment = async (paymentInfo) => {
 
 // 구매 확정 처리
 const confirmPurchase = async () => {
-  loading.value = true;
-  error.value = null;
+  if (!paymentResult.value?.orderId) return;
 
   try {
+    loading.value = true;
+    error.value = null;
+
+    console.log("구매확정 요청 시작 - orderId:", paymentResult.value.orderId);
+
     const response = await axios.post(
       `http://localhost:8080/api/payments/${paymentResult.value.orderId}/confirm`
     );
+
+    console.log("구매확정 응답:", response.data);
     paymentDetails.value = response.data;
-    alert("구매가 확정되었습니다.");
+
+    if (response.data.status === "ESCROW_RELEASED") {
+      alert("구매가 확정되었습니다.");
+    } else {
+      throw new Error(`잘못된 상태: ${response.data.status}`);
+    }
   } catch (error) {
     console.error("구매 확정 중 오류:", error);
-    error.value = "구매 확정 중 오류가 발생했습니다.";
+    error.value =
+      error.response?.data?.message || "구매 확정 중 오류가 발생했습니다.";
+    alert(error.value);
   } finally {
     loading.value = false;
   }
@@ -97,17 +119,18 @@ const confirmPurchase = async () => {
 
 // 결제 상세 정보 조회
 const getPaymentDetails = async () => {
+  if (!paymentResult.value?.paymentKey) return null;
+
   try {
-    loading.value = true;
     const response = await axios.get(
       `http://localhost:8080/api/payments/${paymentResult.value.paymentKey}`
     );
+    console.log("상세 정보 조회: ", response.data);
     paymentDetails.value = response.data;
   } catch (error) {
     console.error("상세 정보 조회 실패:", error);
     error.value = "상세 정보 조회 중 오류가 발생했습니다.";
-  } finally {
-    loading.value = false;
+    return null;
   }
 };
 </script>
@@ -132,7 +155,9 @@ const getPaymentDetails = async () => {
         >
           상세 내역 보기
         </button>
+        <!-- paymentDetails가 있고 상태가 ESCROW_HOLDING일 때 구매확정 버튼 표시 -->
         <button
+          v-show="paymentDetails && paymentDetails.status === 'ESCROW_HOLDING'"
           @click="confirmPurchase"
           :disabled="loading"
           class="confirm-btn"

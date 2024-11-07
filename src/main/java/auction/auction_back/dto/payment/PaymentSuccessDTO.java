@@ -11,6 +11,6 @@ public class PaymentSuccessDTO {
     private String paymentKey;
     private String orderId;
     private Integer amount;
-    private Long buyerId;
-    private Long sellerId;
+    private String buyerId;
+    private String sellerId;
 }

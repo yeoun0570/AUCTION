@@ -24,6 +24,15 @@ const startPayment = async () => {
     loading.value = true;
     orderId.value = `ORDER_${new Date().getTime()}`;
 
+    //현재 도메인 확인 로그
+    console.log('Current origin: ', window.location.origin);
+
+    // successUrl
+    const successUrl = new URL(router.resolve({ name: 'PaymentSuccess' }).href, window.location.origin).href;
+
+    console.log('Success URL: ', successUrl); //디버깅용
+
+    // 토스 페이먼츠 결제창 호출
     await tossPayments.value.requestPayment("카드", {
       amount: amount.value,
       orderId: orderId.value,
@@ -70,5 +79,5 @@ const startPayment = async () => {
 </template>
 
 <style scoped>
-@import "../assets/paymentTest.css";
+@import "../../assets/paymentTest.css";
 </style>
