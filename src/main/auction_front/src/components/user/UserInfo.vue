@@ -7,8 +7,6 @@ const loading = ref(true);
 const error = ref(null);
 const userId = "buyer1"; //테스트를 위한 사용자 아이디 임의로 설정
 
-//날짜 포맷 함수 추가
-
 //사용자 정보 페이지 로딩할 메서드 작성
 const loadUserInfo = async () => {
   try {
