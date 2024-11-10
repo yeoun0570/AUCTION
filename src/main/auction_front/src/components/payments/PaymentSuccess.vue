@@ -15,6 +15,7 @@ onMounted(async () => {
       paymentKey: params.get("paymentKey"),
       orderId: params.get("orderId"),
       amount: params.get("amount"),
+      productId: 4,
     };
     console.log("결제 정보: ", paymentInfo);
     paymentResult.value = paymentInfo;
@@ -44,8 +45,8 @@ const confirmPayment = async (paymentInfo) => {
         paymentKey: paymentInfo.paymentKey,
         orderId: paymentInfo.orderId,
         amount: parseInt(paymentInfo.amount),
-        buyerId: "buyer", // 실제로는 로그인한 사용자 ID
-        sellerId: "seller", // 실제로는 상품 판매자 ID
+        buyerId: "seller", // 실제로는 로그인한 사용자 ID
+        productId: paymentInfo.productId, // URL 쿼리 파라미터에서 가져옴
       }
     );
 
@@ -71,8 +72,8 @@ const processSuccessPayment = async (paymentInfo) => {
         paymentKey: paymentInfo.paymentKey,
         orderId: paymentInfo.orderId,
         amount: parseInt(paymentInfo.amount),
-        buyerId: "buyer", // 실제로는 로그인한 사용자 ID
-        sellerId: "seller", // 실제로는 상품 판매자 ID
+        buyerId: "seller", // 실제로는 로그인한 사용자 ID
+        productId: paymentInfo.productId, // URL 쿼리 파라미터에서 가져옴
       }
     );
 
@@ -124,7 +125,7 @@ const getPaymentDetails = async () => {
 
   try {
     const response = await axios.get(
-      `http://localhost:8080/api/payments/${paymentResult.value.paymentKey}`
+      `http://localhost:8080/api/payments/${paymentResult.value.orderId}/detail`
     );
     console.log("상세 정보 조회: ", response.data);
     paymentDetails.value = response.data;
@@ -132,6 +133,41 @@ const getPaymentDetails = async () => {
     console.error("상세 정보 조회 실패:", error);
     error.value = "상세 정보 조회 중 오류가 발생했습니다.";
     return null;
+  }
+};
+
+// 결제 취소 처리
+const cancelOrder = async () => {
+  if (!paymentResult.value?.orderId) return;
+
+  try {
+    loading.value = true;
+    error.value = null;
+
+    // 취소 전 확인
+    if (!confirm("결제를 취소하시겠습니까?")) {
+      return;
+    }
+
+    console.log("결제 취소 시작 - orderId:", paymentResult.value.orderId);
+
+    const response = await axios.post(
+      `http://localhost:8080/api/payments/${paymentResult.value.orderId}/cancel`
+    );
+
+    console.log("결제 취소 완료:", response.data);
+    paymentDetails.value = response.data;
+    alert("결제가 취소되었습니다. 전체 금액이 환불됩니다.");
+
+    // 취소 후 메인 페이지나 상품 페이지로 이동
+    // router.push("/"); // 또는 상품 상세 페이지로 이동
+  } catch (error) {
+    console.error("결제 취소 중 오류:", error);
+    error.value =
+      error.response?.data?.message || "결제 취소 중 오류가 발생했습니다.";
+    alert(error.value);
+  } finally {
+    loading.value = false;
   }
 };
 </script>
@@ -166,6 +202,15 @@ const getPaymentDetails = async () => {
           구매 확정
         </button>
       </div>
+
+      <button
+        v-show="paymentDetails && paymentDetails.status === 'ESCROW_HOLDING'"
+        @click="cancelOrder"
+        :disabled="loading"
+        class="cancel-btn"
+      >
+        결제 취소
+      </button>
     </div>
 
     <div v-if="paymentDetails" class="payment-details">
