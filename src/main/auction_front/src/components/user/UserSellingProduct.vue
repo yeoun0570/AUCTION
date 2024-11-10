@@ -46,6 +46,13 @@ onMounted(() => {
     </button>
 
     <button
+      @click="changeStatus('RESERVED')"
+      :class="{ active: currentStatus === 'RESERVED' }"
+    >
+      예약중
+    </button>
+
+    <button
       @click="changeStatus('SOLD_OUT')"
       :class="{ active: currentStatus === 'SOLD_OUT' }"
     >
@@ -67,7 +74,13 @@ onMounted(() => {
       <h3>{{ product.productName }}</h3>
       <p class="price">{{ product.price.toLocaleString() }}원</p>
       <p class="status" :class="product.status.toLowerCase()">
-        {{ product.status === "SELLING" ? "판매중" : "판매완료" }}
+        {{
+          product.status === "SELLING"
+            ? "판매중"
+            : product.status === "RESERVED"
+            ? "예약중"
+            : "판매완료"
+        }}
       </p>
     </div>
   </div>
@@ -135,5 +148,10 @@ onMounted(() => {
 .status.sold {
   background-color: #dc3545;
   color: white;
+}
+
+.status.reserved {
+  background-color: #ffc107;
+  color: black;
 }
 </style>
