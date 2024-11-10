@@ -1,9 +1,7 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
-import { useRouter, useRoute } from 'vue-router';
 
-const route = useRoute();
 const orderData = ref(null);
 const loading = ref(false);
 const error = ref(null);
@@ -11,6 +9,8 @@ const tossPayments = ref(null);
 const orderId = ref(null);
 const productId = 1;
 
+//provide로 PaymenstSuccess.vue에 데이터 공유
+provide('orderData', orderData);
 
 //주문페이지 데이터 로드
 const loadOrderPage = async () => {
@@ -41,6 +41,13 @@ const startPayment = async () => {
   try {
     loading.value = true;
     orderId.value = `ORDER_${new Date().getTime()}`;
+
+    const paymentInfo = {
+      productId: productId,
+      buyerId: 'buyer1',
+      amount: orderData.value.totalAmount,
+      productName: orderData.value.productName,
+    }
 
     //현재 도메인 확인 로그
     console.log('Current origin: ', window.location.origin);

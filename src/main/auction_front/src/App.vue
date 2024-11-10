@@ -8,6 +8,6 @@ import PaymentWidget from "./components/trashPayment/PaymentWidget.vue";
   <!-- <TossWidgetTest></TossWidgetTest> -->
    <!-- <PaymentWidget></PaymentWidget> -->
    <!-- <TossTest></TossTest> -->
-    <PaymentTest></PaymentTest>
+  <PaymentTest></PaymentTest>
   <RouterView></RouterView>
 </template>
