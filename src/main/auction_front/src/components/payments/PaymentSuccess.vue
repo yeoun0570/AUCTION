@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { inject, ref, onMounted } from "vue";
 import axios from "axios";
 
-
+const orderData = inject('orderData');
 const paymentResult = ref(null);
 const paymentDetails = ref(null);
 const loading = ref(false);

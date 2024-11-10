@@ -1,6 +1,6 @@
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { provide, ref, onMounted } from "vue";
 
 const orderData = ref(null);
 const loading = ref(false);
@@ -58,7 +58,7 @@ const startPayment = async () => {
       orderId: orderId.value,
       orderName: orderData.value.productName,
       customerName: orderData.value.nickname,
-      successUrl: `${window.location.origin}/success?productId=${productId}`,
+      successUrl: `${window.location.origin}/success`,
       failUrl: `${window.location.origin}/fail`,
     });
   } catch (error) {
