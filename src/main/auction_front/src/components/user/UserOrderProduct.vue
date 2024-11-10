@@ -1,0 +1,111 @@
+<script setup>
+import axios from "axios";
+import { ref, onMounted } from "vue";
+
+const userOrders = ref([]);
+const userId = "buyer1"; //추후에 로그인 한 유저로 변경
+const currentStatus = ref("ESCROW_HOLDING"); //상태 기본값 설정
+const currentPage = ref(0);
+const totalPages = ref(0);
+const pageSize = ref(5);
+
+//상품 상태 변경 메서드
+const changeStatus = async (status) => {
+  currentStatus.value = status;
+  await loadUserOrders();
+};
+
+const loadUserOrders = async (page = 0) => {
+  try {
+    //params 객체를 사용하면 Axios가 파라미터들을 자동으로 인코딩해줌
+    const response = await axios.get(
+      `http://localhost:8080/api/my-store/buy-products`,
+      {
+        params: {
+          userId: userId,
+          status: currentStatus.value,
+          page: page,
+          size: pageSize.value,
+        },
+      }
+    );
+    userOrders.value = response.data.content; //백의 PageResponseDTO의 실제 데이터를 가리키는 content
+    totalPages.value = response.data.totalPages; //백의 PageResponseDTO의 전체 페이지수 = totalPages
+    currentPage.value = response.data.currentPage; //백의 PageResponseDTO의 현재 페이지 = currentPage
+  } catch (error) {
+    console.error("로딩중 에러: ", error);
+  }
+};
+
+const changePage = async (page) => {
+  await loadUserOrders(page);
+  // 페이지 변경 후 스크롤 최상단으로 이동
+  window.scrollTo(0, 0);
+};
+
+onMounted(() => {
+  loadUserOrders();
+});
+</script>
+
+<template>
+  <h1>내 구매 상품</h1>
+  <div class="status-filter">
+    <button
+      @click="changeStatus('ESCROW_HOLDING')"
+      :class="{ active: currentStatus === 'ESCROW_HOLDING' }"
+    >
+      구매중
+    </button>
+
+    <button
+      @click="changeStatus('ESCROW_RELEASED')"
+      :class="{ active: currentStatus === 'ESCROW_RELEASED' }"
+    >
+      구매완료
+    </button>
+  </div>
+
+  <div v-if="userOrders.length > 0" class="orders-grid">
+    <div v-for="order in userOrders" :key="order.orderId" class="order-card">
+      <img
+        :src="order.thumbnailImage"
+        :alt="order.productName"
+        class="product-image"
+      />
+      <h3>{{ order.productName }}</h3>
+      <p class="price">{{ order.price.toLocaleString() }}원</p>
+      <p class="status" :class="order.status.toLowerCase()">
+        {{ order.status === "ESCROW_HOLDING" ? "예약중" : "판매완료" }}
+      </p>
+    </div>
+  </div>
+  <div v-else>구매한 상품이 없습니다.</div>
+
+    <!-- 페이지네이션 -->
+    <div v-if="totalPages > 1" class="pagination">
+    <button :disabled="currentPage === 0" @click="changePage(currentPage - 1)">
+      이전
+    </button>
+
+    <button
+      v-for="page in totalPages"
+      :key="page"
+      :class="{ active: currentPage === page - 1 }"
+      @click="changePage(page - 1)"
+    >
+      {{ page }}
+    </button>
+
+    <button
+      :disabled="currentPage === totalPages - 1"
+      @click="changePage(currentPage + 1)"
+    >
+      다음
+    </button>
+  </div>
+</template>
+
+<style scoped>
+@import url("../../assets/userOrderProduct.css");
+</style>
