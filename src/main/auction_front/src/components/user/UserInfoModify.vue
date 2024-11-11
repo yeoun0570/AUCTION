@@ -48,7 +48,7 @@ const updateUserInfo = async () => {
 
     // 필요한 데이터만 추출
     const updateData = {
-      profile: userInfo.value.profile,
+      userId: userId,
       nickname: userInfo.value.nickname,
       mobile: userInfo.value.mobile,
       email: userInfo.value.email,
@@ -57,14 +57,18 @@ const updateUserInfo = async () => {
       addrDetail: userInfo.value.addrDetail,
       addrZipcode: userInfo.value.addrZipcode,
       profile: userInfo.value.profile,
-      kids: userInfo.value.kids,
+      kids: userInfo.value.kids?.map(kid => ({
+        kidId: kid.kidId,
+        kidBirth: kid.kidBirth,
+        kidGender: kid.kidGender,
+      })),
     };
 
     console.log("전송할 데이터: ", updateData);
 
     await axios.post(
       `http://localhost:8080/api/my-store/info/modify`,
-      userInfo.value
+      updateData
     );
     alert("정보가 성공적으로 수정되었습니다.");
     router.push({ name: "UserInfo" });
@@ -79,14 +83,16 @@ const updateUserInfo = async () => {
 const addKid = () => {
   if (!userInfo.value.kids) userInfo.value.kids = [];
   userInfo.value.kids.push({
+    userId: userId,
+    kidId: null,
     kidBirth: null,
     kidGender: true,
   });
 };
 
-const removeKid = (index) => {
-  userInfo.value.kids.splice(index, 1);
-};
+// const removeKid = (index) => {
+//   userInfo.value.kids.splice(index, 1);
+// };
 
 const cancel = () => {
   router.push({ name: "UserInfo" });
@@ -104,7 +110,7 @@ const cancel = () => {
 
       <div class="form-group">
         <label>이름</label>
-        <input v-model="userInfo.nickname" type="nickname" />
+        <input v-model="userInfo.nickname" type="text" />
       </div>
 
       <div class="form-group">
@@ -151,7 +157,6 @@ const cancel = () => {
             <option :value="true">남자</option>
             <option :value="false">여자</option>
           </select>
-          <button type="button" @click="removeKid(index)">삭제</button>
         </div>
       </div>
 

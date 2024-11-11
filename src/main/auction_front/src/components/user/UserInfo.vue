@@ -12,7 +12,6 @@ const userId = "buyer1"; //테스트를 위한 사용자 아이디 임의로 설
 const goToModify = () => {
   router.push({
     name: "UserInfoModify",
-    //state로 현재 정보 전달
     params: { currentUserInfo: userInfo.value },
   });
 };
@@ -30,6 +29,7 @@ const loadUserInfo = async () => {
         },
       }
     );
+    console.log("받아온 데이터:", response.data);  // 데이터 확인
     userInfo.value = response.data;
   } catch (err) {
     error.value = "사용자 정보를 불러오는데 실패했습니다.";
@@ -58,7 +58,7 @@ onMounted(() => {
       </div>
       <div class="info-item">
         <label>이름:</label>
-        <span>{{ userInfo.nickname }}</span>
+        <span>{{ userInfo.nickname}}</span>
       </div>
       <div class="info-item">
         <label>이메일:</label>
