@@ -1,7 +1,9 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const userProducts = ref([]);
 const userId = "seller1"; //추후에 로그인 한 유저로 변경
 const currentStatus = ref("SELLING"); //상태 기본값 설정
@@ -43,6 +45,40 @@ const changePage = async (page) => {
   window.scrollTo(0, 0);
 };
 
+// 수정 페이지로 이동하는 함수
+const goToModify = (product) => {
+  console.log(product);
+  console.log(product.productId);
+  router.push({
+    name: "UserModifyProduct",
+    params: {
+      productId: product.productId,
+      productInfo: product, // 현재 상품 정보 전달
+    },
+  });
+};
+
+const removeProduct = async (product) => {
+  console.log(product);
+  console.log(product.productId);
+  console.log(userProducts.value);
+  try {
+    const response = await axios.post(
+      "http://localhost:8080/api/my-store/sale-products/remove",
+      userProducts.value,
+      {
+        params: {
+          userId: userId,
+          productId: product.productId,
+        },
+      }
+    );
+    alert("상품 삭제에 성공했습니다.");
+  } catch (error) {
+    console.log("상품 삭제에 실패했습니다: ", error);
+  }
+};
+
 onMounted(() => {
   loadUserProducts();
 });
@@ -79,11 +115,7 @@ onMounted(() => {
       :key="product.productName"
       class="product-card"
     >
-      <img
-        :src="product.thumbnailImage"
-        :alt="product.productName"
-        class="product-image"
-      />
+      <img :src="product.thumbnailImage" class="product-image" />
       <h3>{{ product.productName }}</h3>
       <p class="price">{{ product.price.toLocaleString() }}원</p>
       <p class="status" :class="product.status.toLowerCase()">
@@ -95,6 +127,10 @@ onMounted(() => {
             : "판매완료"
         }}
       </p>
+      <button @click="goToModify(product)" class="modify-btn">수정하기</button>
+      <button @click="removeProduct(product)" class="remove-btn">
+        삭제하기
+      </button>
     </div>
   </div>
   <div v-else>등록된 상품이 없습니다.</div>
@@ -124,5 +160,5 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@import url('../../assets/userSellingProduct.css');
+@import url("../../assets/userSellingProduct.css");
 </style>
