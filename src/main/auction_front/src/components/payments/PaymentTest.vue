@@ -7,24 +7,26 @@ const loading = ref(false);
 const error = ref(null);
 const tossPayments = ref(null);
 const orderId = ref(null);
-const productId = 1;
+const productId = 36;
 
 //provide로 PaymenstSuccess.vue에 데이터 공유
-provide('orderData', orderData);
+provide("orderData", orderData);
 
 //주문페이지 데이터 로드
 const loadOrderPage = async () => {
   try {
     loading.value = true;
     //const productId = 1; //추후에 실제 받은 값으로 변경
-    const resposne = await axios.get(`http://localhost:8080/api/payments/page/${productId}`)
+    const resposne = await axios.get(
+      `http://localhost:8080/api/payments/page/${productId}`
+    );
     orderData.value = resposne.data;
-  } catch(error) {
-    console.log('주문 페이지 로딩 실패: ', error);
+  } catch (error) {
+    console.log("주문 페이지 로딩 실패: ", error);
   } finally {
     loading.value = false;
   }
-}
+};
 
 // 토스페이먼츠 초기화
 onMounted(() => {
@@ -44,13 +46,13 @@ const startPayment = async () => {
 
     const paymentInfo = {
       productId: productId,
-      buyerId: 'buyer1',
+      buyerId: "buyer1",
       amount: orderData.value.totalAmount,
       productName: orderData.value.productName,
-    }
+    };
 
     //현재 도메인 확인 로그
-    console.log('Current origin: ', window.location.origin);
+    console.log("Current origin: ", window.location.origin);
 
     // 토스 페이먼츠 결제창 호출
     await tossPayments.value.requestPayment("카드", {
@@ -77,12 +79,25 @@ const startPayment = async () => {
     <div v-else-if="orderData" class="order-content">
       <!-- 상품 정보 섹션 -->
       <div class="product-section">
-        <img :src="orderData.thumbnailImage" alt="상품 이미지" class="thumbnail">
+        <img
+          :src="orderData.thumbnailImage"
+          alt="상품 이미지"
+          class="thumbnail"
+        />
         <div class="product-info">
           <h2>{{ orderData.productName }}</h2>
-          <p class="price">상품가격: {{ orderData.price.toLocaleString() }}원</p>
-          <p class="charge">수수료 (3.5%): {{ orderData.chargeAmount.toLocaleString() }}원</p>
-          <p class="total">총 결제금액: {{ orderData.totalAmount.toLocaleString() }}원</p>
+          <p class="price">
+            상품가격: {{ orderData.price.toLocaleString() }}원
+          </p>
+          <p class="charge">
+            수수료 (3.5%): {{ orderData.chargeAmount.toLocaleString() }}원
+          </p>
+          <p v-if="orderData.shippingFree !== 0" class="charge">
+            배송비: {{ orderData.shippingFree.toLocaleString() }}원
+          </p>
+          <p class="total">
+            총 결제금액: {{ orderData.totalAmount.toLocaleString() }}원
+          </p>
         </div>
       </div>
 
@@ -99,11 +114,7 @@ const startPayment = async () => {
       </div>
 
       <!-- 결제 버튼 -->
-      <button 
-        @click="startPayment" 
-        :disabled="loading" 
-        class="payment-button"
-      >
+      <button @click="startPayment" :disabled="loading" class="payment-button">
         결제하기
       </button>
     </div>
