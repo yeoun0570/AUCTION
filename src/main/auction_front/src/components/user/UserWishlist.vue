@@ -36,6 +36,26 @@ const changePage = async (page) => {
   window.scrollTo(0, 0);
 };
 
+const removeWishlist = async (product) => {
+  console.log(product);
+  console.log(product.productId);
+  try {
+    const response = await axios.post(
+      'http://localhost:8080/api/my-store/wishlist/remove',
+      product,
+      {
+        params: {
+          userId: userId,
+          productId: product.productId,
+        },
+      },
+    );
+    alert("찜목록에서 삭제 완료")
+  } catch(error) {
+    console.log("찜목록에서 삭제 실패: ", error);
+  }
+}
+
 onMounted(() => {
   loadUserWishlist();
 });
@@ -65,6 +85,9 @@ onMounted(() => {
             : "판매완료"
         }}
       </p>
+      <button
+      @click="removeWishlist(product)"
+      class="remove-btn">제외하기</button>
     </div>
   </div>
   <div v-else>찜한 상품이 없습니다.</div>
