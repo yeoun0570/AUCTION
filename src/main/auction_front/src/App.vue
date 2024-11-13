@@ -6,6 +6,9 @@ import UserInfo from "./components/user/UserInfo.vue";
 import UserSellingProduct from "./components/user/UserSellingProduct.vue";
 import UserOrderProduct from "./components/user/UserOrderProduct.vue";
 import UserWishlist from "./components/user/UserWishlist.vue";
+import UserSetProduct from "./components/user/UserRegisterProduct.vue";
+import UserWriteReview from "./components/user/UserWriteReview.vue";
+import UserReviewInMyStore from "./components/user/UserReviewInMyStore.vue";
 </script>
 
 <template>
@@ -13,9 +16,12 @@ import UserWishlist from "./components/user/UserWishlist.vue";
   <!-- <PaymentWidget></PaymentWidget> -->
   <!-- <TossTest></TossTest> -->
   <!-- <PaymentTest></PaymentTest> -->
-  <UserInfo></UserInfo>
+  <!-- <UserInfo></UserInfo> -->
   <!-- <UserSellingProduct></UserSellingProduct> -->
   <!-- <UserOrderProduct></UserOrderProduct> -->
   <!-- <UserWishlist></UserWishlist> -->
+  <!-- <UserSetProduct></UserSetProduct> -->
+  <!-- <UserWriteReview></UserWriteReview> -->
+  <UserReviewInMyStore></UserReviewInMyStore>
   <RouterView></RouterView>
 </template>
