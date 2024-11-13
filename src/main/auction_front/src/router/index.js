@@ -2,6 +2,8 @@ import ConnectionTest from "@/components/ConnectionTest.vue";
 import PaymentSuccess from "@/components/payments/PaymentSuccess.vue";
 import UserInfo from "@/components/user/UserInfo.vue";
 import UserInfoModify from "@/components/user/UserInfoModify.vue";
+import UserModifyProduct from "@/components/user/UserModifyProduct.vue";
+import UserSellingProduct from "@/components/user/UserSellingProduct.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -23,6 +25,18 @@ const router = createRouter({
       path: "/my-store/info/modify",
       name: "UserInfoModify",
       component: UserInfoModify,
+    },
+
+    {
+      path: "/my-store/sale-products/modify/:productId",
+      name: "UserModifyProduct",
+      component: UserModifyProduct,
+    },
+
+    {
+      path: "/my-store/sale-products",
+      name: "UserSellingProduct",
+      component: UserSellingProduct,
     },
   ],
 });
