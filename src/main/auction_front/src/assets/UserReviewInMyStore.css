@@ -1,0 +1,154 @@
+.reviews-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .main-title {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+  }
+  
+  .store-score {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .store-score span {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .review-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-2px);
+  }
+  
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .profile-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .profile-image {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  
+  .author-name {
+    margin: 0;
+    font-size: 1.1em;
+    color: #333;
+  }
+  
+  .rating {
+    background-color: #007bff;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+  
+  .product-info {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .product-name {
+    color: #666;
+    margin: 0;
+    font-size: 0.9em;
+  }
+  
+  .review-content {
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 30px;
+  }
+  
+  .page-btn {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .page-btn:hover:not(:disabled) {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  .page-btn.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+  }
+  
+  .page-btn:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+  }
+  
+  .no-reviews {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 600px) {
+    .reviews-container {
+      padding: 10px;
+    }
+  
+    .review-card {
+      padding: 15px;
+    }
+  
+    .main-title {
+      font-size: 1.5em;
+    }
+  
+    .pagination {
+      flex-wrap: wrap;
+    }
+  }
