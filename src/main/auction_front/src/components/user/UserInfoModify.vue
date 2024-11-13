@@ -57,7 +57,7 @@ const updateUserInfo = async () => {
       addrDetail: userInfo.value.addrDetail,
       addrZipcode: userInfo.value.addrZipcode,
       profile: userInfo.value.profile,
-      kids: userInfo.value.kids?.map(kid => ({
+      kids: userInfo.value.kids?.map((kid) => ({
         kidId: kid.kidId,
         kidBirth: kid.kidBirth,
         kidGender: kid.kidGender,
@@ -89,10 +89,6 @@ const addKid = () => {
     kidGender: true,
   });
 };
-
-// const removeKid = (index) => {
-//   userInfo.value.kids.splice(index, 1);
-// };
 
 const cancel = () => {
   router.push({ name: "UserInfo" });
