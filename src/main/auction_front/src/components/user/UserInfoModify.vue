@@ -56,6 +56,13 @@ const updateUserInfo = async () => {
       addrMain: userInfo.value.addrMain,
       addrDetail: userInfo.value.addrDetail,
       addrZipcode: userInfo.value.addrZipcode,
+      isPerson: userInfo.value.person,
+      isDeupty: userInfo.value.deputy,
+      deputyGender: userInfo.value.deputyGender,
+      isCompanion: userInfo.value.companion,
+      companionGender: userInfo.value.companionGender,
+      isFreeShipping: userInfo.value.freeShipping,
+      shippingFree: userInfo.value.shippingFree,
       profile: userInfo.value.profile,
       kids: userInfo.value.kids?.map((kid) => ({
         kidId: kid.kidId,
