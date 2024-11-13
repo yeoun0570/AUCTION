@@ -9,6 +9,7 @@ import UserWishlist from "./components/user/UserWishlist.vue";
 import UserSetProduct from "./components/user/UserRegisterProduct.vue";
 import UserWriteReview from "./components/user/UserWriteReview.vue";
 import UserReviewInMyStore from "./components/user/UserReviewInMyStore.vue";
+import UserRemove from "./components/user/UserRemove.vue";
 </script>
 
 <template>
@@ -22,6 +23,7 @@ import UserReviewInMyStore from "./components/user/UserReviewInMyStore.vue";
   <!-- <UserWishlist></UserWishlist> -->
   <!-- <UserSetProduct></UserSetProduct> -->
   <!-- <UserWriteReview></UserWriteReview> -->
-  <UserReviewInMyStore></UserReviewInMyStore>
+  <!-- <UserReviewInMyStore></UserReviewInMyStore> -->
+  <UserRemove></UserRemove>
   <RouterView></RouterView>
 </template>
