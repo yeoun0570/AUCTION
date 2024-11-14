@@ -1,6 +1,8 @@
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue";
+import PaymentCancelButton from "../payments/PaymentCancelButton.vue";
+import PaymentConfirmButton from "../payments/PaymentConfirmButton.vue";
 
 const userOrders = ref([]);
 const userId = "buyer1"; //추후에 로그인 한 유저로 변경
@@ -43,6 +45,73 @@ const changePage = async (page) => {
   window.scrollTo(0, 0);
 };
 
+// 결제 취소 처리
+const cancelOrder = async () => {
+  if (!paymentResult.value?.orderId) return;
+
+  try {
+    loading.value = true;
+    error.value = null;
+
+    // 취소 전 확인
+    if (!confirm("결제를 취소하시겠습니까?")) {
+      return;
+    }
+
+    console.log("결제 취소 시작 - orderId:", paymentResult.value.orderId);
+
+    const response = await axios.post(
+      `http://localhost:8080/api/payments/${paymentResult.value.orderId}/cancel`
+    );
+
+    console.log("결제 취소 완료:", response.data);
+    paymentDetails.value = response.data;
+    alert("결제가 취소되었습니다. 전체 금액이 환불됩니다.");
+
+    // 취소 후 메인 페이지나 상품 페이지로 이동
+    // router.push("/"); // 또는 상품 상세 페이지로 이동
+  } catch (error) {
+    console.error("결제 취소 중 오류:", error);
+    error.value =
+      error.response?.data?.message || "결제 취소 중 오류가 발생했습니다.";
+    alert(error.value);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// 구매 확정 처리
+const confirmPurchase = async () => {
+  if (!paymentResult.value?.orderId) return;
+
+  try {
+    loading.value = true;
+    error.value = null;
+
+    console.log("구매확정 요청 시작 - orderId:", paymentResult.value.orderId);
+
+    const response = await axios.post(
+      `http://localhost:8080/api/payments/${paymentResult.value.orderId}/confirm`
+    );
+
+    console.log("구매확정 응답:", response.data);
+    paymentDetails.value = response.data;
+
+    if (response.data.status === "ESCROW_RELEASED") {
+      alert("구매가 확정되었습니다.");
+    } else {
+      throw new Error(`잘못된 상태: ${response.data.status}`);
+    }
+  } catch (error) {
+    console.error("구매 확정 중 오류:", error);
+    error.value =
+      error.response?.data?.message || "구매 확정 중 오류가 발생했습니다.";
+    alert(error.value);
+  } finally {
+    loading.value = false;
+  }
+};
+
 onMounted(() => {
   loadUserOrders();
 });
@@ -64,6 +133,8 @@ onMounted(() => {
     >
       구매완료
     </button>
+    <PaymentCancelButton :productData="userOrders" @cancelOrder="cancelOrder"></PaymentCancelButton>
+    <PaymentConfirmButton ></PaymentConfirmButton>
   </div>
 
   <div v-if="userOrders.length > 0" class="orders-grid">

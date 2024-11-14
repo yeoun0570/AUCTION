@@ -1,5 +1,5 @@
 import ConnectionTest from "@/components/ConnectionTest.vue";
-import PaymentSuccess from "@/components/payments/PaymentSuccess.vue";
+import PaymentSuccess from "@/pages/PaymentSuccess.vue";
 import UserInfo from "@/components/user/UserInfo.vue";
 import UserInfoModify from "@/components/user/UserInfoModify.vue";
 import UserModifyProduct from "@/components/user/UserModifyProduct.vue";

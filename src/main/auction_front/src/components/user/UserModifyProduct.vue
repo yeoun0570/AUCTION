@@ -8,19 +8,21 @@ const route = useRoute();
 const productId = route.params.productId;
 const categories = ref({
   majorCategories: [],
-  middleCategories: []
+  middleCategories: [],
 });
 
 const productInfo = ref(route.state?.productInfo || {});
 const selectedCategories = ref({
-  majorId: '',
-  middleId: ''
+  majorId: "",
+  middleId: "",
 });
 
 // 카테고리 데이터 로드
 const loadCategories = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/categories/major");
+    const response = await axios.get(
+      "http://localhost:8080/api/categories/major"
+    );
     categories.value.majorCategories = response.data;
     if (productInfo.value.majorId) {
       await loadCategories(productInfo.value.majorId);
@@ -33,7 +35,7 @@ const loadCategories = async () => {
 // 대분류 선택시 중분류 로드
 const handleMajorChange = async (event) => {
   selectedCategories.value.majorId = event.target.value;
-  selectedCategories.value.middleId = '';
+  selectedCategories.value.middleId = "";
 
   if (selectedCategories.value.majorId) {
     try {
@@ -64,7 +66,7 @@ const updateProduct = async () => {
       }
     );
     alert("상품 수정이 완료되었습니다.");
-    router.push({ name: 'UserSellingProduct' });  // 목록 페이지로 이동
+    router.push({ name: "UserSellingProduct" }); // 목록 페이지로 이동
   } catch (error) {
     console.log("상품 수정 실패: ", error);
     alert("상품 수정에 실패하였습니다.");
@@ -159,6 +161,78 @@ onMounted(async () => {
         <option value="SOLD_OUT">판매 완료</option>
       </select>
     </div>
+
+    <div class="form-group">
+      <label>직거래 여부</label>
+      <div class="radio-group">
+        <label class="radio-label">
+          <input type="radio" v-model="productInfo.person" :value="true" name="person"/>
+          <span>예</span>
+        </label>
+        <label class="radio-label">
+          <input type="radio" v-model="productInfo.person" :value="false" name="person"/>
+          <span>아니요</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" v-if="productInfo.person">
+        <label>동행인 여부</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.companion" :value="true" name="companion"/>
+            <span>예</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.companion" :value="false" name="companion"/>
+            <span>아니요</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 동행인이 true일 때만 보이는 성별 선택 -->
+      <div class="form-group" v-if="productInfo.companion">
+        <label>동행인 성별</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.companionGender" :value="true" name="companionGender"/>
+            <span>남자</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.companionGender" :value="false" name="companionGender"/>
+            <span>여자</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group" v-if="productInfo.person">
+        <label>대리인 여부</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.deputy" :value="true" name="deputy"/>
+            <span>예</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.deputy" :value="false" name="deputy"/>
+            <span>아니요</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 대리인이 true일 때만 보이는 성별 선택 -->
+      <div class="form-group" v-if="productInfo.deputy">
+        <label>대리인 성별</label>
+        <div class="radio-group">
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.deputyGender" :value="true" name="deputyGender"/>
+            <span>남자</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" v-model="productInfo.deputyGender" :value="false" name="deputyGender"/>
+            <span>여자</span>
+          </label>
+        </div>
+      </div>
 
     <div class="form-group">
       <label>상품 설명</label>

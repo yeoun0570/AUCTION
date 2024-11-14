@@ -37,7 +37,7 @@ public class PaymentController {
         return ResponseEntity.ok(response);
     }
 
-    //결제 성공 및 결제 자금 보관
+    //결제 성공 및 결제 자금 보관(에스크로 홀딩)
     @PostMapping("/success")
     public ResponseEntity<PaymentResponseDTO> processSuccessPayment(
             @RequestBody PaymentSuccessDTO request
